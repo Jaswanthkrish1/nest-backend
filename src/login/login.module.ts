@@ -4,7 +4,7 @@ import { LoginService } from './login.service';
 import { login } from './login.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+
 
 @Module({
   imports:[TypeOrmModule.forFeature([login]),JwtModule.register({

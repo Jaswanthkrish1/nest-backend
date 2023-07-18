@@ -1,4 +1,5 @@
-import { Entity,Column,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn } from "typeorm";
+import { Entity,Column,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn, BeforeInsert } from "typeorm";
+import * as bcrypt from 'bcrypt';
 @Entity()
 export class login{
     @PrimaryGeneratedColumn()
@@ -12,5 +13,10 @@ export class login{
     
     @CreateDateColumn()
     createdat:string;
+    // Hook to hash the password before saving
+    @BeforeInsert()
+    async hashPassword() {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
 
 }
