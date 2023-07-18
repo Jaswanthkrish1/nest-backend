@@ -10,7 +10,7 @@ export class CreateTaskDto {
     id?:number;
     name?: string;
     description?: string;
-    completeBefore?: Date;
+    completeBefore?: string;
     assignedToUser?: number;
     assignedByUser?: number;
   }

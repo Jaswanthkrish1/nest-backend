@@ -87,7 +87,7 @@ export class LoginService {
     //     console.log(data.affected)
     // return data;
     // }
-
+    
     async forgotpassword(Login: login): Promise<string> {
         const userdetails = await this.findByEmail(Login.email);
         if (userdetails != null) {

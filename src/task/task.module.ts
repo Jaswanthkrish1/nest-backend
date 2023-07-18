@@ -7,9 +7,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { login } from 'src/login/login.entity';
 import { LoginService } from 'src/login/login.service';
+import { UserService } from 'src/user/user.service';
 @Module({
   imports:[TypeOrmModule.forFeature([task, User,login]),JwtModule],
-  providers: [TaskService,LoginService],
+  providers: [TaskService,LoginService,UserService],
   controllers: [TodoController],
   exports:[TaskService]
 })

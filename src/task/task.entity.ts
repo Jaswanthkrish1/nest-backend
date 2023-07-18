@@ -13,8 +13,8 @@ export class task {
   @Column()
   description: string;
 
-  @Column({ type: 'datetime' })
-  completeBefore: Date;
+  @Column()
+  completeBefore: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'assignedToUserId' })

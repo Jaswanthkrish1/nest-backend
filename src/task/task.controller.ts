@@ -9,16 +9,17 @@ import { UpdateTodoDto } from './create-task.dto';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { setUncaughtExceptionCaptureCallback } from 'process';
 import { error } from 'console';
+import { UserService } from 'src/user/user.service';
 
 @Controller('todos')
 export class TodoController {
-  constructor(private readonly todoService: TaskService,
-    private LoginService:LoginService,
+  constructor(private readonly taskService: TaskService,
+    private LoginService:LoginService
     ) {}
 
   @Get()
   async getAllTodos() {
-    return this.todoService.getAllTodos();
+    return this.taskService.getAllTodos();
   }
 
   @Post()
@@ -28,46 +29,54 @@ export class TodoController {
     @Body('completeBefore') completeBefore: string,
     
   ) {
-    const completeBeforeDate = new Date(completeBefore);
-    return this.todoService.createTodo(name, description, completeBeforeDate);
+   // const completeBeforeDate = new Date(completeBefore);
+    return this.taskService.createTodo(name, description, completeBefore);
   }
 
   @Get(':id')
   async getTodoById(@Param('id') id: number) {
-    return await  this.todoService.getTodoById(id);
+    return await  this.taskService.getTodoById(id);
   }
 
   @Put('updatetask')
   async updateTodo(
-    @Body() Task:UpdateTodoDto,@Res() responce:any
+    @Body() Taskdto:UpdateTodoDto,@Res() responce:any
   ) {
-    console.log(Task)
-   
-    const Log= await this.LoginService.findbyId(Task.assignedByUser)
+    console.log(Taskdto)
+   //finding admin user
+    const Log= await this.LoginService.findbyId(Taskdto.assignedByUser)
+    //if user exites
     if(Log){
+      //admin user id
     console.log(Log);
+    // object of User details
     const user=new User();
-    user.id = Task.assignedToUser; 
+    user.id = Taskdto.assignedToUser;
+    //object of login admin details 
     const log=new login()
-    log.id=Task.assignedByUser;
+    log.id=Taskdto.assignedByUser;
+    //object of task details
     const t=new task();
-    t.id=Task.id;
-    t.name=Task.name;
-    t.description=Task.description;t.completeBefore=Task.completeBefore;
+    t.id=Taskdto.id;
+    t.name=Taskdto.name;
+    t.description=Taskdto.description;
+    t.completeBefore=Taskdto.completeBefore;
     t.assignedToUser=user;
     t.assignedByUser=log;
- const res=this.todoService.updateTodo(t);
+    console.log(t)
+    //if task Updated sccussfully then  send responce
+ const res=this.taskService.updateTodo(t);
     if(res){
         responce.setHeader('Authorization', ``);
-        responce.status(200).json({ user });
-        
+        responce.status(200).json({ user , res });
         return responce;
-    }else{  throw new UnauthorizedException}}
+    }else{  throw new UnauthorizedException}
+  }
     else{throw new UnauthorizedException}
 }
 
   @Delete(':id')
   async deleteTodo(@Param('id') id: number) {
-    return this.todoService.deleteTodo(id);
+    return this.taskService.deleteTodo(id);
   }
 }
